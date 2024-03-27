@@ -1,23 +1,19 @@
 from __future__ import absolute_import
 from src.maze_manager import MazeManager
 
-
 if __name__ == "__main__":
 
     # Create the manager
     manager = MazeManager()
 
-    # Add a 10x10 maze to the manager
-    maze = manager.add_maze(10, 10)
+    # Add a 20x20 maze to the manager
+    maze = manager.add_maze(20, 20)
 
-    # Solve the maze using the Bi Directional algorithm
-    manager.solve_maze(maze.id, "BiDirectional", "fancy")
+    # Save mp4 file and png
+    # manager.set_filename("uniform_cost_search")
 
-    # Display the maze
-    manager.show_maze(maze.id)
-
-    # Show how the maze was generated
-    manager.show_generation_animation(maze.id)
+    # Solve the maze using the A* Search algorithm
+    manager.solve_maze(maze.id, "uniform_cost_search")
 
     # Show how the maze was solved
     manager.show_solution_animation(maze.id)

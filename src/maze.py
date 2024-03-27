@@ -39,9 +39,12 @@ class Maze(object):
         self.entry_coor = self._pick_random_entry_exit(None)
         self.exit_coor = self._pick_random_entry_exit(self.entry_coor)
         self.generation_path = []
-        self.solution_path = None
+        self.solution_path = None  # sjaqnjs
+        self.solution_csot = 0 # sjaqjnjs
+        self.search_path = None  # sjaqnjs
         self.initial_grid = self.generate_grid()
         self.grid = self.initial_grid
+        random.seed(1)
         self.generate_maze(algorithm, (0, 0))
 
     def generate_grid(self):

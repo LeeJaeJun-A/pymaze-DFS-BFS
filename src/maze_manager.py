@@ -1,8 +1,8 @@
 from src.maze import Maze
 from src.maze_viz import Visualizer
-from src.solver import DepthFirstBacktracker
-from src.solver import BiDirectional
-from src.solver import BreadthFirst
+from src.solver import uniform_cost_search  #  sjaqjnjs
+from src.solver import a_star_search  # sjaqjnjs
+from src.solver import heuristic  # sjaqjnjs
 
 
 class MazeManager(object):
@@ -117,15 +117,16 @@ class MazeManager(object):
 
         """DEVNOTE: When adding a new solution method, call it from here.
             Also update the list of names in the documentation above"""
-        if method == "DepthFirstBacktracker":
-            solver = DepthFirstBacktracker(maze, neighbor_method, self.quiet_mode)
-            maze.solution_path = solver.solve()
-        elif method == "BiDirectional":
-            solver = BiDirectional(maze, neighbor_method, self.quiet_mode)
-            maze.solution_path = solver.solve()
-        elif method == "BreadthFirst":
-            solver = BreadthFirst(maze, neighbor_method, self.quiet_mode)
-            maze.solution_path = solver.solve()
+        if method == "uniform_cost_search":
+            result = uniform_cost_search(maze)
+            maze.search_path = result[0]
+            maze.solution_path = result[1]
+            maze.solution_cost = result[2]
+        elif method == "a_star_search":
+            result = a_star_search(maze, heuristic)
+            maze.search_path = result[0]
+            maze.solution_path = result[1]
+            maze.solution_cost = result[2]
 
     def show_maze(self, id, cell_size=1):
         """Just show the generation animation and maze"""
@@ -140,7 +141,7 @@ class MazeManager(object):
         vis = Visualizer(self.get_maze(id), cell_size, self.media_name)
         vis.show_maze_solution()
 
-    def show_solution_animation(self, id, cell_size =1):
+    def show_solution_animation(self, id, cell_size=1):
         """
         Shows the animation of the path that the solver took.
 
@@ -177,4 +178,4 @@ class MazeManager(object):
         Args:
             enabled (bool): True when quiet mode is on, False when it is off
         """
-        self.quiet_mode=enabled
+        self.quiet_mode = enabled

@@ -1,8 +1,5 @@
 import matplotlib.pyplot as plt
 from matplotlib import animation
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
 
 
 class Visualizer(object):
@@ -29,6 +26,7 @@ class Visualizer(object):
         self.lines = dict()
         self.squares = dict()
         self.media_filename = media_filename
+        self.step = 0  #  sjaqjnjs
 
     def set_media_filename(self, filename):
         """Sets the filename of the media
@@ -78,7 +76,7 @@ class Visualizer(object):
         """Sets the initial properties of the maze plot. Also creates the plot and axes"""
 
         # Create the plot figure
-        fig = plt.figure(figsize = (7, 7*self.maze.num_rows/self.maze.num_cols))
+        fig = plt.figure(figsize=(7, 7*self.maze.num_rows/self.maze.num_cols))
 
         # Create the axes
         self.ax = plt.axes()
@@ -96,6 +94,7 @@ class Visualizer(object):
 
         return fig
 
+    # 최적 결과만 나오도록 sjaqjnjs
     def show_maze_solution(self):
         """Function that plots the solution to the maze. Also adds indication of entry and exit points."""
 
@@ -105,24 +104,20 @@ class Visualizer(object):
         # Plot the walls onto the figure
         self.plot_walls()
 
-        list_of_backtrackers = [path_element[0] for path_element in self.maze.solution_path if path_element[1]]
-
         # Keeps track of how many circles have been drawn
         circle_num = 0
 
         self.ax.add_patch(plt.Circle(((self.maze.solution_path[0][0][1] + 0.5)*self.cell_size,
                                       (self.maze.solution_path[0][0][0] + 0.5)*self.cell_size), 0.2*self.cell_size,
-                                     fc=(0, circle_num/(len(self.maze.solution_path) - 2*len(list_of_backtrackers)),
+                                     fc=(0, circle_num/(len(self.maze.solution_path)),
                                          0), alpha=0.4))
 
         for i in range(1, self.maze.solution_path.__len__()):
-            if self.maze.solution_path[i][0] not in list_of_backtrackers and\
-                    self.maze.solution_path[i-1][0] not in list_of_backtrackers:
-                circle_num += 1
-                self.ax.add_patch(plt.Circle(((self.maze.solution_path[i][0][1] + 0.5)*self.cell_size,
-                    (self.maze.solution_path[i][0][0] + 0.5)*self.cell_size), 0.2*self.cell_size,
-                    fc = (0, circle_num/(len(self.maze.solution_path) - 2*len(list_of_backtrackers)), 0), alpha = 0.4))
-
+            circle_num += 1
+            self.ax.add_patch(plt.Circle(((self.maze.solution_path[i][0][1] + 0.5)*self.cell_size,
+                (self.maze.solution_path[i][0][0] + 0.5)*self.cell_size), 0.2*self.cell_size,
+                fc = (0, circle_num/(len(self.maze.solution_path)), 0), alpha = 0.4))
+        self.ax.set_title("Cost: {}".format(self.maze.solution_cost), fontname="serif", fontsize=19)
         # Display the plot to the user
         plt.show()
 
@@ -209,11 +204,8 @@ class Visualizer(object):
                               self.maze.generation_path[frame][0]*self.cell_size))
             return []
 
-        logging.debug("Creating generation animation")
         anim = animation.FuncAnimation(fig, animate, frames=self.maze.generation_path.__len__(),
                                        interval=100, blit=True, repeat=False)
-
-        logging.debug("Finished creating the generation animation")
 
         # Display the plot to the user
         plt.show()
@@ -258,11 +250,13 @@ class Visualizer(object):
         of coordinates indicating the path taken to carve out (break down walls) the maze."""
 
         # Create the figure and style the axes
+        self.step = 0
         fig = self.configure_plot()
 
+        
         # Adding indicator to see shere current search is happening.
-        indicator = plt.Rectangle((self.maze.solution_path[0][0][0]*self.cell_size,
-                                   self.maze.solution_path[0][0][1]*self.cell_size), self.cell_size, self.cell_size,
+        indicator = plt.Rectangle((self.maze.search_path[0][0][0]*self.cell_size,
+                                   self.maze.search_path[0][0][1]*self.cell_size), self.cell_size, self.cell_size,
                                   fc="purple", alpha=0.6)
         self.ax.add_patch(indicator)
 
@@ -271,41 +265,45 @@ class Visualizer(object):
         def animate_squares(frame):
             """Function to animate the solved path of the algorithm."""
             if frame > 0:
-                if self.maze.solution_path[frame - 1][1]:  # Color backtracking
-                    self.squares["{},{}".format(self.maze.solution_path[frame - 1][0][0],
-                                           self.maze.solution_path[frame - 1][0][1])].set_facecolor("orange")
+                if self.maze.search_path[frame - 1][1]:  # Show Optimal Path
+                    self.squares["{},{}".format(self.maze.search_path[frame - 1][0][0],
+                                           self.maze.search_path[frame - 1][0][1])].set_facecolor("orange")
 
-                self.squares["{},{}".format(self.maze.solution_path[frame - 1][0][0],
-                                       self.maze.solution_path[frame - 1][0][1])].set_visible(True)
-                self.squares["{},{}".format(self.maze.solution_path[frame][0][0],
-                                       self.maze.solution_path[frame][0][1])].set_visible(False)
+                self.squares["{},{}".format(self.maze.search_path[frame - 1][0][0],
+                                       self.maze.search_path[frame - 1][0][1])].set_visible(True)
+                self.squares["{},{}".format(self.maze.search_path[frame][0][0],
+                                       self.maze.search_path[frame][0][1])].set_visible(False)
             return []
 
         def animate_indicator(frame):
             """Function to animate where the current search is happening."""
-            indicator.set_xy((self.maze.solution_path[frame][0][1] * self.cell_size,
-                              self.maze.solution_path[frame][0][0] * self.cell_size))
+            indicator.set_xy((self.maze.search_path[frame][0][1] * self.cell_size,
+                              self.maze.search_path[frame][0][0] * self.cell_size))
             return []
 
         def animate(frame):
             """Function to supervise animation of all objects."""
             animate_squares(frame)
             animate_indicator(frame)
-            self.ax.set_title("Step: {}".format(frame + 1), fontname = "serif", fontsize = 19)
+            if(self.maze.search_path[frame][1] is False):
+                self.step = frame + 1
+            self.ax.set_title("Search Step: {}".format(self.step), fontname = "serif", fontsize = 19)
             return []
 
-        logging.debug("Creating solution animation")
-        anim = animation.FuncAnimation(fig, animate, frames=self.maze.solution_path.__len__(),
+        anim = animation.FuncAnimation(fig, animate, frames=self.maze.search_path.__len__(),
                                        interval=100, blit=True, repeat=False)
-        logging.debug("Finished creating solution animation")
-
-        # Display the animation to the user
-        plt.show()
 
         # Handle any saving
+        
         if self.media_filename:
             print("Saving solution animation. This may take a minute....")
             mpeg_writer = animation.FFMpegWriter(fps=24, bitrate=1000,
                                                  codec="libx264", extra_args=["-pix_fmt", "yuv420p"])
             anim.save("{}{}{}x{}.mp4".format(self.media_filename, "_solution_", self.maze.num_rows,
                                            self.maze.num_cols), writer=mpeg_writer)
+            
+        # Display the animation to the user
+        plt.show()
+
+        
+        

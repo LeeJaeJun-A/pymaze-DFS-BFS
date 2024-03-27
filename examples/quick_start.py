@@ -35,7 +35,7 @@ if __name__ == "__main__":
     manager.solve_maze(maze.id, "DepthFirstBacktracker")
 
     # If we want to save the maze & maze solution images along with their animations, we need to let the manager know.
-    manager.set_filename("myFileName")
+    # manager.set_filename("myFileName")
 
     # To see the unsolved maze, call
     manager.show_maze(maze.id)

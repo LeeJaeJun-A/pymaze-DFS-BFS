@@ -4,6 +4,7 @@ import math
 
 # global variable to store list of all available algorithms
 algorithm_list = ["dfs_backtrack", "bin_tree"]
+random.seed(0)
 
 def depth_first_recursive_backtracker( maze, start_coor ):
         k_curr, l_curr = start_coor             # Where to start generating
