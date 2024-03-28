@@ -37,22 +37,22 @@ def uniform_cost_search(maze):
                 if not any(neighbour == item[1] for item in pq.queue):
                     pq.put((g_score[neighbour], neighbour))
             
-    optimal_path = []
-    optimal_cost = 0
+    found_path = []
+    found_cost = 0
     cell = goal
     while cell != start:
-        optimal_path.append((cell, True))
+        found_path.append((cell, True))
         previous_cell = came_from[cell]
 
         if cell[0] == previous_cell[0]:
-            optimal_cost += Decimal('0.9')
+            found_cost += Decimal('0.9')
         else:
-            optimal_cost += Decimal('1.1')
+            found_cost += Decimal('1.1')
         cell = previous_cell
-    optimal_path.append((start, True))
-    optimal_path.reverse()
-    path.extend(optimal_path)                  
-    return [path, optimal_path, optimal_cost]
+    found_path.append((start, True))
+    found_path.reverse()
+    path.extend(found_path)                  
+    return [path, found_path, found_cost]
 
 def heuristic(cell_1, cell_2):
     x_1, y_1 = cell_1
