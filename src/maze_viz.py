@@ -255,8 +255,8 @@ class Visualizer(object):
 
         
         # Adding indicator to see shere current search is happening.
-        indicator = plt.Rectangle((self.maze.search_path[0][0][0]*self.cell_size,
-                                   self.maze.search_path[0][0][1]*self.cell_size), self.cell_size, self.cell_size,
+        indicator = plt.Rectangle((self.maze.path[0][0][0]*self.cell_size,
+                                   self.maze.path[0][0][1]*self.cell_size), self.cell_size, self.cell_size,
                                   fc="purple", alpha=0.6)
         self.ax.add_patch(indicator)
 
@@ -265,32 +265,32 @@ class Visualizer(object):
         def animate_squares(frame):
             """Function to animate the solved path of the algorithm."""
             if frame > 0:
-                if self.maze.search_path[frame - 1][1]:  # Show Optimal Path
-                    self.squares["{},{}".format(self.maze.search_path[frame - 1][0][0],
-                                           self.maze.search_path[frame - 1][0][1])].set_facecolor("orange")
+                if self.maze.path[frame - 1][1]:  # Show Optimal Path
+                    self.squares["{},{}".format(self.maze.path[frame - 1][0][0],
+                                           self.maze.path[frame - 1][0][1])].set_facecolor("orange")
 
-                self.squares["{},{}".format(self.maze.search_path[frame - 1][0][0],
-                                       self.maze.search_path[frame - 1][0][1])].set_visible(True)
-                self.squares["{},{}".format(self.maze.search_path[frame][0][0],
-                                       self.maze.search_path[frame][0][1])].set_visible(False)
+                self.squares["{},{}".format(self.maze.path[frame - 1][0][0],
+                                       self.maze.path[frame - 1][0][1])].set_visible(True)
+                self.squares["{},{}".format(self.maze.path[frame][0][0],
+                                       self.maze.path[frame][0][1])].set_visible(False)
             return []
 
         def animate_indicator(frame):
             """Function to animate where the current search is happening."""
-            indicator.set_xy((self.maze.search_path[frame][0][1] * self.cell_size,
-                              self.maze.search_path[frame][0][0] * self.cell_size))
+            indicator.set_xy((self.maze.path[frame][0][1] * self.cell_size,
+                              self.maze.path[frame][0][0] * self.cell_size))
             return []
 
         def animate(frame):
             """Function to supervise animation of all objects."""
             animate_squares(frame)
             animate_indicator(frame)
-            if(self.maze.search_path[frame][1] is False):
+            if(self.maze.path[frame][1] is False):
                 self.step = frame + 1
             self.ax.set_title("Search Step: {}".format(self.step), fontname = "serif", fontsize = 19)
             return []
 
-        anim = animation.FuncAnimation(fig, animate, frames=self.maze.search_path.__len__(),
+        anim = animation.FuncAnimation(fig, animate, frames=self.maze.path.__len__(),
                                        interval=100, blit=True, repeat=False)
 
         # Handle any saving

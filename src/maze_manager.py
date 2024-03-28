@@ -119,12 +119,12 @@ class MazeManager(object):
             Also update the list of names in the documentation above"""
         if method == "uniform_cost_search":
             result = uniform_cost_search(maze)
-            maze.search_path = result[0]
+            maze.path = result[0]
             maze.solution_path = result[1]
             maze.solution_cost = result[2]
         elif method == "a_star_search":
             result = a_star_search(maze, heuristic)
-            maze.search_path = result[0]
+            maze.path = result[0]
             maze.solution_path = result[1]
             maze.solution_cost = result[2]
 
