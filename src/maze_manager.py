@@ -1,8 +1,8 @@
 from src.maze import Maze
 from src.maze_viz import Visualizer
-from src.solver import uniform_cost_search  #  sjaqjnjs
-from src.solver import a_star_search  # sjaqjnjs
-from src.solver import heuristic  # sjaqjnjs
+from src.solver import uniform_cost_search
+from src.solver import a_star_search
+from src.solver import heuristic
 
 
 class MazeManager(object):
