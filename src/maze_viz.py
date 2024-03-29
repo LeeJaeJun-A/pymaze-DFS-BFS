@@ -26,8 +26,8 @@ class Visualizer(object):
         self.lines = dict()
         self.squares = dict()
         self.media_filename = media_filename
-        self.step = 0  #  sjaqjnjs
-
+        self.step = 0
+        
     def set_media_filename(self, filename):
         """Sets the filename of the media
             Args:
@@ -94,7 +94,6 @@ class Visualizer(object):
 
         return fig
 
-    # 최적 결과만 나오도록 sjaqjnjs
     def show_maze_solution(self):
         """Function that plots the solution to the maze. Also adds indication of entry and exit points."""
 
