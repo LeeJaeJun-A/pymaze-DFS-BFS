@@ -121,3 +121,9 @@ To implement the Uniform Cost Search algorithm run
 To implement the A* Search algorithm run
 
 `python -m examples.solve_a_star_search`
+
+#### Visualization
+
+You can view the execution process of Uniform Cost Search and A* Search, along with the results, in the mp4 files located in the "visualization" folder. 
+
+Additionally, you can see the outcome represented solely by the png files.
